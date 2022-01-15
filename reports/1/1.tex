@@ -248,12 +248,10 @@ Next we proceeded obtain the data and get the necessary plots using the followin
     ax2.plot(m,ym_sin,"-*",label=r"MySinSeries($\frac{\pi}{4},m$)")
     ax2.plot(m,np.sin(np.pi/4)*np.ones(m.shape),"-",label=r"Numpy's $\sin(\frac{\pi}{4})$")
     ax2.legend()
-
     ax1.set_xlabel("x");ax1.set_ylabel("y")
     ax2.set_xlabel("m");ax2.set_ylabel(r"$\cos(\frac{\pi}{4})$")
 
     fig2,(ax12,ax22) = plt.subplots(1, 2)
-
     yj_cos = np.array([MyCosSeries(xs,0,i) for i in m],dtype=float)
     for j in range(len(m)) : 
         ax12.plot(xs,yj_cos[j],label=f"m={m[j]}")
@@ -267,7 +265,6 @@ Next we proceeded obtain the data and get the necessary plots using the followin
     ax22.plot(m,np.cos(np.pi/4)*np.ones(m.shape),"-",label=r"Numpy's $\cos(\frac{\pi}{4})$")
     ax22.set_xlabel("m");ax22.set_ylabel(r"$\cos(\frac{\pi}{4})$")
     ax22.legend()
-
     xvec = np.arange(0,np.pi+0.1,np.pi/8)
     reltol = 0.5e-6
     n,calsin,relerror =get_n_sin(xvec,reltol)
@@ -279,7 +276,6 @@ Next we proceeded obtain the data and get the necessary plots using the followin
     ax0.scatter(xvec,list(map(lambda x: float(f"{x:#.3g}"),calsin)),label = "MySinSeries() with 3 significant digits")
     ax0.set_xlabel("x");ax0.set_ylabel("y")
     print(table)
-
     plt.plot()
     plt.show()
 \end{lstlisting}
@@ -289,6 +285,7 @@ Next we proceeded obtain the data and get the necessary plots using the followin
 %\end{minted}
 \newpage
 \section[]{Discussion}
+The results show us that the calculated value of $\sin(x)$ approaches the so-called true value (Numpy's approximation) as more and more terms are taken into account.   
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{graph1}
@@ -303,16 +300,17 @@ Next we proceeded obtain the data and get the necessary plots using the followin
 \end{figure}
 
 \begin{figure}[H]
+	\centering
 \begin{subfigure}[b]{\textwidth}
 	\centering
 	\includegraphics[width=0.9\linewidth]{graph3}
 	\caption{ \centering \small Plot of sin(x) vs x (upto 3 significant digits), the scattered plot is MySinSeries(x,n) with n varied to get the desired accuracy of 6 significant digits.}
 	\label{fig:graph3}
 \end{subfigure}
-
-\begin{subfigure}[b]{\textwidth}
+\vskip 10mm
+\begin{subfigure}[b]{0.6\textwidth}
 	\centering
-	\includegraphics[width=0.9\linewidth]{output}
+	\includegraphics[width=\linewidth]{output}
 	\caption{ \small The data for the various calculated values of $ \sin (x) $ using Numpy and MySinSeries upto accuracy of 6 significant digits.}
 	\label{fig:data}
 
@@ -320,6 +318,7 @@ Next we proceeded obtain the data and get the necessary plots using the followin
 	\caption{ \small Graphs for programming Question 2.}
 	\label{fig:fig3}
 \end{figure}
+\noindent
 The graphs indicate that the value of MySinSeries() needs to be calculated for a larger value of $n$, that is more terms are required, for a fixed accuracy as we move away from the centre $a$ of the expansion.
 This result is only natural as the partial sums give best approximations for points near the centre $a$. We also observe that the first 6 significant digits do not match for $x = \pi $, this is because the value is very close to zero resulting in a huge round-off errors in the relative error.   
 \end{document}

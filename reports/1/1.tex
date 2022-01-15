@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
-%\usepackage[UTF8]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{caption}
@@ -46,6 +46,7 @@
 
 \lstset{style=mystyle}
 
+\usepackage{tabularx}
 %\lstset{ 
 %	upquote=true,
 %	columns=fullflexible,
@@ -55,16 +56,47 @@
 %	{\ }{{\copyablespace}}1
 %}
 
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
 \usepackage[space=true]{accsupp}
 \newcommand{\copyablespace}{\BeginAccSupp{method=hex,unicode,ActualText=00A0}\hphantom{x}\EndAccSupp{}}
-
+\title{\sffamily Numerical analysis of Taylor Series}
+\author{\sffamily Shashvat Jain\\ \sffamily (2020PHY1114)(20068567054)}
 \begin{document}
 
 %\begin{abstract}
 
 %\end{abstract}
+\begin{titlepage}
+	\renewcommand\familydefault{\sfdefault}
+	\fontfamily{stix}\selectfont
+	\maketitle
+	\vspace{4cm}
+	\begin{center}
+		\large Lab Report for Assignment No. 1
+	\end{center}
+	\vspace{4cm}
 
-
+	\begin{table}[h]
+		\centering	
+		\begin{tabularx}{0.55\textwidth}{lr}		
+			College Roll No :& 2020PHY1114\\
+			University Roll NoName:& 20068567054\\
+			Unique Paper Code: &32221401\\
+			Paper Title: &Mathematical physics III Lab\\
+			Course and Semester :&B.Sc.(H) Physics Sem IV\\
+			Due Date: & Jan 15,2022\\
+			Date of Submission:& Jan 14,2022\\
+			Lab Report File Name:& mp3A1\_2020PHY1114.pdf\\
+			Partner’s Name:& Harsh Saxsena\\
+			Partner’s College  Roll No.:& \sffamily 2020PHY1162\\
+		\end{tabularx}
+	\end{table}
+	
+	\pagenumbering{gobble}
+\end{titlepage}
+\newpage
 \section{Theory}
 
 Any one-variable infinitely differentiable real-valued function $ f(x): A \rightarrow B $ where $A,B \subseteq \mathbb{R}$ might be expanded as an infinite power series function with parameter $ x_0 \in A $, This series function is also termed as \textbf{Taylor series} representation of $ f $ because of its procurement from the \textbf{Taylor's Theorem.}   
@@ -99,7 +131,57 @@ The functions $ \exp(x),\sin(x),\cos(x): \mathbb{R} \rightarrow \mathbb{R}$ are 
 \end{align}
 
 \section{Algorithm}
-\newpage
+
+\begin{algorithm}[H]
+	\caption{Calculate partial sums for taylor series for exponential function }
+	\begin{algorithmic}
+	  \Procedure{exp}{$x,a,n$}
+	  \State Input: x points , a about which we calculate series,n as no. of terms to include in partial temrs
+	  \State Output: Returns y the approx value of $e^x$ 
+	  \State $exp = 0$
+	  \Comment Initialize sum
+		\For{ $k = 0,1,2,3\dots n $}
+		 \State $exp = exp + \frac{(x-a)^{k}}{k!}$
+		 \EndFor 
+		 \State \textbf{return} $exp$              
+	  \EndProcedure
+	\end{algorithmic} 
+  \end{algorithm}
+  
+  
+  \begin{algorithm}[H]
+	\caption{Calculate n-partial sums for taylor series for Sin function }
+	\begin{algorithmic}
+	  \Procedure{Sinseries}{$x,a,n$}
+	  \State Input: x points , a about which we calculate series,n as no. of terms to include in partial terms
+	  \State Output: Returns y the approx value of $\sin(x)$ 
+	  \State $sin = 0$
+	  \Comment Initialize sum
+		\For{ $k = 0,1,2,3\dots n $}
+		 \State $sin = sin + \frac{(-1)^{k}(x-a)^{2k+1}}{(2k+1)!}$
+		 \EndFor 
+		 \State \textbf{return} $sin$              
+	  \EndProcedure
+	\end{algorithmic} 
+  \end{algorithm}
+  
+  \begin{algorithm}[H]
+	\caption{Calculate n-partial sums for taylor series for Cos function}
+	\begin{algorithmic}
+	  \Procedure{Cosseries}{$x,a,n$}
+	  \State Input: x points , a about which we calculate series,n as no. of terms to include in partial terms
+	  \State Output: Returns y the approx value of $\cos(x)$ 
+	  \State $\cos = 0$
+	  \Comment Initialize sum
+		\For{ $k = 0,1,2,3\dots n $}
+		 \State $\cos = \cos + \frac{(-1)^{k}(x-a)^{2k}}{(2k)!}$
+		 \EndFor 
+		 \State \textbf{return} $\cos$              
+	  \EndProcedure
+	\end{algorithmic} 
+  \end{algorithm}
+  
+  
 \section{Programming}
 First we defined the following functions for MySinSeries,MyCosSeries which take in \textbf{x}: the point where the series is to be calculated, \textbf{a}: the center of the Taylor series and \textbf{n}: the number of terms of the series to calculate.
 \begin{lstlisting}[language=Python]
@@ -210,20 +292,34 @@ Next we proceeded obtain the data and get the necessary plots using the followin
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{graph1}
-	\caption[Graphs generated for MySinSeries]{Graphs generated for MySinSeries: The graph on the left shows the different taylor series approximations corresponding to different values of m=2,4,...20. The graph on the right shows how the value of $\sin(\pi/4)$ varies with different values of m.}
+	\caption[Graphs generated for MySinSeries]{\small Graphs generated for MySinSeries: The graph on the left shows the different taylor series approximations corresponding to different values of m=2,4,...20. The graph on the right shows how the value of $\sin(\pi/4)$ varies with different values of m.}
 	\label{fig:graph1}
 \end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{graph2}
-	\caption[Graphs generated for MySinSeries]{Graphs generated for MySinSeries: The graph on the left shows the different taylor series approximations corresponding to different values of m=2,4,...20. The graph on the right shows how the value of $\sin(\pi/4)$ varies with different values of m.}
+	\caption[Graphs generated for MyCosSeries]{\small Graphs generated for MyCosSeries: The graph on the left shows the different taylor series approximations corresponding to different values of m=2,4,...20. The graph on the right shows how the value of $\cos(\pi/4)$ varies with different values of m.}
 	\label{fig:graph2}
 \end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\linewidth]{graph3}
-	\caption[Graphs generated for MySinSeries]{Graphs generated for MySinSeries: The graph on the left shows the different taylor series approximations corresponding to different values of m=2,4,...20. The graph on the right shows how the value of $\sin(\pi/4)$ varies with different values of m.}
-	\label{fig:graph3}
-\end{figure}
 
+\begin{figure}[H]
+\begin{subfigure}[b]{\textwidth}
+	\centering
+	\includegraphics[width=0.9\linewidth]{graph3}
+	\caption{ \centering \small Plot of sin(x) vs x (upto 3 significant digits), the scattered plot is MySinSeries(x,n) with n varied to get the desired accuracy of 6 significant digits.}
+	\label{fig:graph3}
+\end{subfigure}
+
+\begin{subfigure}[b]{\textwidth}
+	\centering
+	\includegraphics[width=0.9\linewidth]{output}
+	\caption{ \small The data for the various calculated values of $ \sin (x) $ using Numpy and MySinSeries upto accuracy of 6 significant digits.}
+	\label{fig:data}
+
+\end{subfigure}
+	\caption{ \small Graphs for programming Question 2.}
+	\label{fig:fig3}
+\end{figure}
+The graphs indicate that the value of MySinSeries() needs to be calculated for a larger value of $n$, that is more terms are required, for a fixed accuracy as we move away from the centre $a$ of the expansion.
+This result is only natural as the partial sums give best approximations for points near the centre $a$. We also observe that the first 6 significant digits do not match for $x = \pi $, this is because the value is very close to zero resulting in a huge round-off errors in the relative error.   
 \end{document}

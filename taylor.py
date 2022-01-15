@@ -74,7 +74,7 @@ def setaxis(ax, title="",x=["",""]):
 
 if __name__ == "__main__":
     xs= np.linspace(-2*np.pi,2*np.pi,1000)
-    m = np.arange(2,20,2)
+    m = np.arange(2,21,2)
     fig1,(ax1,ax2) = plt.subplots(1, 2)
     yj_sin = np.array([MySinSeries(xs,0,i) for i in m],dtype=float)
     
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     ax2.legend()
 
     ax1.set_xlabel("x");ax1.set_ylabel("y")
-    ax2.set_xlabel("m");ax2.set_ylabel(r"$\cos(\frac{\pi}{4})$")
+    ax2.set_xlabel("m");ax2.set_ylabel(r"$\sin(\frac{\pi}{4})$")
 
     fig2,(ax12,ax22) = plt.subplots(1, 2)
 
@@ -99,7 +99,9 @@ if __name__ == "__main__":
         ax12.plot(xs,yj_cos[j],label=f"m={m[j]}")
     ax12.plot(xs,np.cos(xs),label="Numpy's cos(x) ")
     ax12.set_ylim([-10, 10])
+    
     setaxis(ax12,"$\cos(x)$")
+    
     ax12.set_xlabel("x");ax12.set_ylabel("y")
 
     ym_cos= MyCosSeries(np.pi/4,0,m) 
@@ -108,16 +110,19 @@ if __name__ == "__main__":
     ax22.set_xlabel("m");ax22.set_ylabel(r"$\cos(\frac{\pi}{4})$")
     ax22.legend()
 
+    
     xvec = np.arange(0,np.pi+0.1,np.pi/8)
     reltol = 0.5e-6
     n,calsin,relerror =get_n_sin(xvec,reltol)
+
     table = pd.DataFrame({"x": xvec , "MySinSeries(x)" :map(lambda x: f"{x:#.9g}",calsin),"n":n ,"Numpy's sin(x)":map(lambda x: f"{x:#.9g}",np.sin(xvec))})
     table.to_csv("table.csv")
+    
     fig0,ax0 = plt.subplots(1, 1)
-    xs2 = np.linspace(0,2*np.pi)
+    xs2 = np.linspace(0,np.pi)
     ax0.plot(xs2,np.sin(xs2),label= "Numpy's sin(x) continuous")
     ax0.scatter(xvec,list(map(lambda x: float(f"{x:#.3g}"),calsin)),label = "MySinSeries() with 3 significant digits")
-    ax0.set_xlabel("x");ax0.set_ylabel("y")
+    ax0.set_xlabel("x");ax0.set_ylabel("y");ax0.grid()
     print(table)
 
     plt.plot()

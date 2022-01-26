@@ -4,9 +4,9 @@ import numpy as np
 from svgpathtools import svg2paths
 import matplotlib.pyplot as plt
 
-PATH = "/home/planck/Pictures/me/me.svg" 
+PATH = "/home/planck/Pictures/me/ankur.svg" 
 JSPATH = "/home/planck/Desktop/mp-3/fourier/dat.js"
-NAME = "me_v3"
+NAME = "ankur"
 class curve:
     def __init__(self,path,name) -> None:
         p,a = svg2paths(path)

@@ -1,17 +1,15 @@
-import { me,me_v2 ,me_v3} from "./dat.js";
+import { me,me_v2 ,me_v3,ankur} from "./dat.js";
 
-const canvas = document.querySelector("#canvas");
+const canvas = document.querySelector("#my_image");
 const dimension = canvas.getBoundingClientRect();
 const ctx = canvas.getContext("2d");
 let graphPoints = [];
 let circleStroke = 1.1;
 let lineStroke = 1.3;
-let fps = 40;
+let fps = 60;
 let timestep = 0.001;
 let time = 0;
 
-canvas.height =  window.innerHeight ;
-canvas.width = window.innerWidth;
 
 class Complex {
   constructor(x, y) {
@@ -46,6 +44,24 @@ class Complex {
   }
 }
 
+class curve {
+  constructor (x,id){
+    this.coeffs = x;
+    this.graphpoints = [];
+    this.mode = 1  ;
+    this.canvas = document.querySelector(id);
+    this.t = 0 ;
+    this.id = 0;
+    this.stopflag = 0;
+    this.canvas.height =  window.innerHeight ;
+    this.canvas.width = window.innerWidth;
+  }
+}
+
+let me_fig = new curve(me_v3,"#my_image");
+let ankur_fig = new curve(ankur,"#my_image");
+
+
 const clearCanvas = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
@@ -79,18 +95,7 @@ const drawCurve = (pointsArr) => {
   }
 };
 
-//const animate = () => {setInterval(startDrawing,3);};
-//const animate = (fun) => {
-//  for (let i = 0; i < speed; i++) {
-//    clearCanvas();
-//    fun();
-//  }
-//  window.requestAnimationFrame(() => {
-//    animate(fun);
-//  });
-//};
-  
-const epicycles = (x, y, rotation, fourier,mode=1) => {
+const epicycles = (x, y,time, rotation, fourier,mode=1) => {
   for (let i = 0; i < fourier.length; i++) {
     const prevX = x;
     const prevY = y;
@@ -112,29 +117,29 @@ const epicycles = (x, y, rotation, fourier,mode=1) => {
 };
 
 
-function startDrawing(coeff,x= canvas.width/2 ,y= canvas.height /2,mode=0,dt = 0.001) {
-  if (time <= 1.2) {
-    const points = epicycles(x, y, 0, coeff,mode);
-    graphPoints.unshift(points);
+const startDrawing = (inptcurve,x= canvas.width/2 ,y= canvas.height /2,dt = 0.001) => {
+  if (inptcurve.stopflag==0) {
+    const points = epicycles(x, y,inptcurve.t, 0, inptcurve.coeffs,inptcurve.mode);
+    if (inptcurve.t<=1.1) {
+      inptcurve.graphpoints.unshift(points);
+    }
+    else {
+      if (inptcurve.mode == 0){ inptcurve.stopflag = 1; };
+    };
   }
-  else{
-    if (mode==1) epicycles(x, y, 0, coeff,mode);
-  }
-  drawCurve(graphPoints);
-  if (graphPoints.length > 10000) graphPoints.pop();
-  time+=dt;
+  drawCurve(inptcurve.graphpoints);
+  inptcurve.t+=dt;
+  //inptcurve.id = setTimeout(setup_new_frame,1000/fps)
+  //window.requestAnimationFrame(setup_new_frame);
 }
 
 const setup_new_frame = () => {
   clearCanvas();
-  startDrawing(me_v3,canvas.width/2,canvas.height/2,1);
-
+  ankur_fig.mode =  0;
+  me_fig.mode =  0;
+  startDrawing(ankur_fig,canvas.width/3,canvas.height/2);
+  startDrawing(me_fig,canvas.width/3*2,canvas.height/2);
+  if (ankur_fig.stopflag && me_fig.stopflag) clearInterval(id1);
+  const id1 = setInterval(setup_new_frame,1000/fps);
 };
-
-//animate(() => {
-//  startDrawing();
-//})
-
-//animate();
-
-setInterval(setup_new_frame,1000/fps);
+setup_new_frame();

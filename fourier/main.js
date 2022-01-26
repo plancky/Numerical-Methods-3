@@ -1,4 +1,4 @@
-import { me } from "./dat.js";
+import { me,me_v2 ,me_v3} from "./dat.js";
 
 const canvas = document.querySelector("#canvas");
 const dimension = canvas.getBoundingClientRect();
@@ -6,10 +6,9 @@ const ctx = canvas.getContext("2d");
 let graphPoints = [];
 let circleStroke = 1.1;
 let lineStroke = 1.3;
-let speed = 1;
-let skip = 1;
+let fps = 40;
+let timestep = 0.001;
 let time = 0;
-let showCircle = true;
 
 canvas.height =  window.innerHeight ;
 canvas.width = window.innerWidth;
@@ -80,18 +79,18 @@ const drawCurve = (pointsArr) => {
   }
 };
 
-
-const animate = (fun) => {
-  for (let i = 0; i < speed; i+=100) {
-    clearCanvas();
-    fun();
-  }
-  window.requestAnimationFrame(() => {
-    animate(fun);
-  });
-};
+//const animate = () => {setInterval(startDrawing,3);};
+//const animate = (fun) => {
+//  for (let i = 0; i < speed; i++) {
+//    clearCanvas();
+//    fun();
+//  }
+//  window.requestAnimationFrame(() => {
+//    animate(fun);
+//  });
+//};
   
-const epicycles = (x, y, rotation, fourier) => {
+const epicycles = (x, y, rotation, fourier,mode=1) => {
   for (let i = 0; i < fourier.length; i++) {
     const prevX = x;
     const prevY = y;
@@ -101,41 +100,41 @@ const epicycles = (x, y, rotation, fourier) => {
     const loc =  new Complex(fourier[i][0],fourier[i][1]);
     const phase = loc.phase() 
 
-    x += radius * Math.cos(freq * time + phase + rotation);
-    y += radius * Math.sin(freq * time + phase + rotation);
+    x += radius * Math.cos(2 * Math.PI* freq * time + phase + rotation);
+    y += radius * Math.sin(2 * Math.PI* freq * time + phase + rotation);
 
     drawLine(prevX, prevY, x, y, circleStroke * 0.2);
-    if (showCircle) {
-      drawCircle(prevX, prevY, radius, circleStroke);
-    }
+    drawCircle(prevX, prevY, radius, circleStroke);
     if (i === fourier.length - 1) drawCircle(x, y, 2, true);
+  
   }
   return { x, y };
 };
 
 
-const startDrawing = () => {
-  const points = epicycles(canvas.width / 2, canvas.height / 2, 0, me);
-  
-  time+=0.01
-  if (time < 2 * Math.PI) {
+function startDrawing(coeff,x= canvas.width/2 ,y= canvas.height /2,mode=0,dt = 0.001) {
+  if (time <= 1.2) {
+    const points = epicycles(x, y, 0, coeff,mode);
     graphPoints.unshift(points);
-  };
+  }
+  else{
+    if (mode==1) epicycles(x, y, 0, coeff,mode);
+  }
   drawCurve(graphPoints);
   if (graphPoints.length > 10000) graphPoints.pop();
+  time+=dt;
+}
+
+const setup_new_frame = () => {
+  clearCanvas();
+  startDrawing(me_v3,canvas.width/2,canvas.height/2,1);
+
 };
 
-//const draw = () => {
-//  running = !running;
-//  document.querySelector(".start-btn").innerText = running ? "stop" : "start";
-//  if (running) {
-//    animate(() => {
-//      startDrawing();
-//    });
-//    return;
-//  }
-//};
-animate(() => {
-  startDrawing();
-})
+//animate(() => {
+//  startDrawing();
+//})
 
+//animate();
+
+setInterval(setup_new_frame,1000/fps);

@@ -95,7 +95,7 @@ const drawCurve = (pointsArr) => {
   }
 };
 
-const epicycles = (x, y,time, rotation, fourier,mode=1) => {
+const epicycles = (x, y,time, rotation, fourier,draw=true) => {
   for (let i = 0; i < fourier.length; i++) {
     const prevX = x;
     const prevY = y;
@@ -107,39 +107,37 @@ const epicycles = (x, y,time, rotation, fourier,mode=1) => {
 
     x += radius * Math.cos(2 * Math.PI* freq * time + phase + rotation);
     y += radius * Math.sin(2 * Math.PI* freq * time + phase + rotation);
-
+    if (draw){
     drawLine(prevX, prevY, x, y, circleStroke * 0.2);
     drawCircle(prevX, prevY, radius, circleStroke);
-    if (i === fourier.length - 1) drawCircle(x, y, 2, true);
-  
+    //if (i === fourier.length - 1) drawCircle(x, y, 2, true);
+    };
   }
   return { x, y };
 };
 
 
 const startDrawing = (inptcurve,x= canvas.width/2 ,y= canvas.height /2,dt = 0.001) => {
-  if (inptcurve.stopflag==0) {
-    const points = epicycles(x, y,inptcurve.t, 0, inptcurve.coeffs,inptcurve.mode);
-    if (inptcurve.t<=1.1) {
-      inptcurve.graphpoints.unshift(points);
-    }
-    else {
-      if (inptcurve.mode == 0){ inptcurve.stopflag = 1; };
-    };
+  if (inptcurve.t<=1.1) {
+    const points = epicycles(x, y,inptcurve.t, 0, inptcurve.coeffs,!inptcurve.stopflag);
+    inptcurve.graphpoints.unshift(points);
   }
+  else {
+    if (inptcurve.mode == 0){ inptcurve.stopflag = 1; };
+  };
   drawCurve(inptcurve.graphpoints);
   inptcurve.t+=dt;
-  //inptcurve.id = setTimeout(setup_new_frame,1000/fps)
-  //window.requestAnimationFrame(setup_new_frame);
 }
 
 const setup_new_frame = () => {
+  if (ankur_fig.stopflag && me_fig.stopflag) return;
   clearCanvas();
-  ankur_fig.mode =  0;
-  me_fig.mode =  0;
   startDrawing(ankur_fig,canvas.width/3,canvas.height/2);
   startDrawing(me_fig,canvas.width/3*2,canvas.height/2);
-  if (ankur_fig.stopflag && me_fig.stopflag) clearInterval(id1);
-  const id1 = setInterval(setup_new_frame,1000/fps);
+  //const id1 = setInterval(setup_new_frame,1000/fps);
+  window.requestAnimationFrame(setup_new_frame);
 };
+
+ankur_fig.mode =  0;
+me_fig.mode =  0;
 setup_new_frame();

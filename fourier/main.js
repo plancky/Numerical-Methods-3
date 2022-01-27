@@ -134,7 +134,7 @@ const setup_new_frame = () => {
   clearCanvas();
   startDrawing(ankur_fig,canvas.width/3,canvas.height/2);
   startDrawing(me_fig,canvas.width/3*2,canvas.height/2);
-  startDrawing(Harsh_fig,canvas.width/2,canvas.height/4);
+  startDrawing(Harsh_fig,canvas.width/2,canvas.height/1.5);
   //const id1 = setInterval(setup_new_frame,1000/fps);
   window.requestAnimationFrame(setup_new_frame);
 };

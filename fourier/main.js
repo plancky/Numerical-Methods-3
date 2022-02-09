@@ -1,4 +1,4 @@
-import { me,me_v2 ,me_v3,ankur} from "./dat.js";
+import { me,me_v2 ,me_v3,ankur,Harsh} from "./dat.js";
 
 const canvas = document.querySelector("#my_image");
 const dimension = canvas.getBoundingClientRect();
@@ -60,7 +60,7 @@ class curve {
 
 let me_fig = new curve(me_v3,"#my_image");
 let ankur_fig = new curve(ankur,"#my_image");
-
+let Harsh_fig = new curve(Harsh,"#my_image");
 
 const clearCanvas = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -134,10 +134,13 @@ const setup_new_frame = () => {
   clearCanvas();
   startDrawing(ankur_fig,canvas.width/3,canvas.height/2);
   startDrawing(me_fig,canvas.width/3*2,canvas.height/2);
+  startDrawing(Harsh_fig,canvas.width/2,canvas.height/1.5);
   //const id1 = setInterval(setup_new_frame,1000/fps);
   window.requestAnimationFrame(setup_new_frame);
 };
 
 ankur_fig.mode =  0;
 me_fig.mode =  0;
+Harsh_fig.mode = 0;
+
 setup_new_frame();

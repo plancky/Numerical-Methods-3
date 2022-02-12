@@ -1,4 +1,5 @@
 import numpy as np 
+from scipy.special import roots_legendre
 
 def MyTrap(func,a,b,n,d=None):
     if d is not None:
@@ -45,9 +46,33 @@ def MySimp(func,a,b,n,d=None):
     y = func(x)
     return((b-a)/(3*n)*np.sum(y[:-1:2]+4*y[1::2]+y[2::2]))
 
+def MyLegQuadrature(func,a,b,n=5,m=100,d=None):
+    x,w = roots_legendre(n)
+    if np.isinf(a) or np.isinf(b):
+        raise ValueError("Gaussian quadrature is only available for finite limits.")
+    if d is not None and m!=1:
+        max_n = np.floor(np.log2(m))
+        n_array = np.logspace(1,max_n,base=2,num = int(max_n))
+        I = np.zeros(n_array.shape)
+        for i in np.arange(0,n_array.shape[0]):
+            I[i] = MyLegQuadrature(func,a,b,n_array[i],m)
+            if i == 0 :
+                continue
+            if np.abs(I[i]-I[i-1]) <= 0.5/10**d*np.abs(I[i]):
+                return I[i],n_array[i]
+        print("Could not reach desired accuracy with the given upperlimit on the number of intervals. ")
+        return I[-1],n_array[-1]
+    I = 0
+    subs = np.linspace(a,b,int(m+1))
+    for a_i,b_i in zip(subs[:-1],subs[1:]):
+        shifted_x = (b_i-a_i)*(x+1)/2 + a_i
+        I+= (b_i-a_i)/2 * np.sum(w*func(shifted_x))
+    return I
+
 MyTrap = np.vectorize(MyTrap)
 MySimp = np.vectorize(MySimp)
+MyLegQuadrature = np.vectorize(MyLegQuadrature)
 
-
-#def Gaussquadrature():
-    
+if __name__=="__main__":
+    #Validation tests integral-assignment_programming(a)
+    pass

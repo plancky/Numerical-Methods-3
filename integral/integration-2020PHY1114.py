@@ -1,4 +1,3 @@
-from numpy import column_stack, dtype, loadtxt
 from sqlalchemy import column
 from Myintegration import *
 import matplotlib.pyplot as plt
@@ -41,9 +40,10 @@ def main():
     #
     # Part(d)
     #
+    
     '''
     signi_digits = 5
-    tab_dat = np.array([MyTrap(f,0,1,10000,signi_digits),MySimp(f,0,1,10000,signi_digits)])    
+    tab_dat = np.array([MyTrap(f,0,1,int(1e6),signi_digits),MySimp(f,0,1,int(1e6),signi_digits)])    
     pi_arr =np.pi*np.ones((2,))
     df = pd.DataFrame({"Method":["Trapezoidal","Simpson1/3"],"Pi_calc":4*tab_dat[:,0], "n":tab_dat[:,1],"E" : np.abs(4*tab_dat[:,0] - pi_arr)/pi_arr})
     print(df)
@@ -84,18 +84,23 @@ def main():
     # Part (f)
     #
     # 
-    '''
+    
     n_points = 2**np.arange(1,6)
-    tol_arr = 0.5/10**(np.arange(2,7))
+    tol_arr = np.arange(2,8)
     #myttype =[('pi',float),('m',float)]
     csv_dat = np.zeros((len(n_points),len(tol_arr)*2))
-    fixed_tol_mat = np.ndarray((len(n_points),len(tol_arr),2)) 
+    #fixed_tol_mat = np.ndarray((len(n_points),len(tol_arr),2),dtype=float) 
     for i,n_i in enumerate(n_points):
+        print(n_i)
         tmp = np.column_stack(MyLegQuadrature(f,0,1,n_i,m=10000,d=tol_arr))
-        fixed_tol_mat[i,:]= tmp
+        tmp[:,0] *= 4 
+        print(tmp) 
+        #fixed_tol_mat[i,:]= tmp
         csv_dat[i,:] = tmp.flatten()   
         #print(quadrature(f,0,1,rtol = tol_arr))
-    np.savetxt("f_data.csv",csv_dat,delimiter= ",",fmt="%g")'''
+    print(csv_dat)
+    np.savetxt("f_data.csv",csv_dat,delimiter= ",",fmt="%.18g")
+    
 if __name__ =="__main__":
     plt.style.use("ggplot")
     #import matplotlib

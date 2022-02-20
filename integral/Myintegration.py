@@ -158,7 +158,7 @@ def MyLegQuadrature(func,a,b,n=5,m=100,d=None):
         m_array = np.logspace(0,max_n,base=2,num = int(max_n+1))
         I = np.zeros(m_array.shape)
         for i in np.arange(0,m_array.shape[0]):
-            I[i] = MyLegQuadrature(func,a,b,m_array[i],m)
+            I[i] = MyLegQuadrature(func,a,b,n,m_array[i])
             if i == 0 :
                 continue
             if np.abs(I[i]-I[i-1]) < 0.5/10**d*np.abs(I[i]):

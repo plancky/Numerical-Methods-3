@@ -100,7 +100,7 @@ def MySimp(func,a,b,m=int(1e3),d=None):
         for i in np.arange(1,m_array.shape[0]):
             x = np.linspace(a,b,int(m_array[i]+1))
             midx = x[1::2] 
-            midy = func(midx)
+            midy = func(midx) 
             I[i] = I[i-1]/2 + h[i]*(4*np.sum(midy) - 2*np.sum(omidy))/3 
             if np.abs(I[i]-I[i-1]) <= 0.5/10**d*np.abs(I[i]):
                 val,last_m =I[i],m_array[i]

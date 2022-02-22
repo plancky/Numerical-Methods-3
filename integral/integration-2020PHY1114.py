@@ -1,4 +1,3 @@
-from sqlalchemy import column
 from Myintegration import *
 import matplotlib.pyplot as plt
 import pandas as pd

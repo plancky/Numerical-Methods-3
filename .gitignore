@@ -1,3 +1,9 @@
+##.vscode
+.vscode
+##.pycache 
+*/__pycache__/*
+##dats 
+*/dats/*
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

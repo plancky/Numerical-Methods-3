@@ -1,0 +1,202 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{float}
+
+\usepackage{blindtext}
+\usepackage{geometry}
+\geometry{
+	a4paper,
+	total={190mm,277mm}, % a4 is 210 x 297 mm
+	left=10mm,
+	top=17mm,
+}
+
+%code
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\usepackage{tabularx}
+%\lstset{ 
+%	upquote=true,
+%	columns=fullflexible,
+%	basicstyle=\ttfamily,
+%	literate={*}{{\char42}}1
+%	{-}{{\char45}}1
+%	{\ }{{\copyablespace}}1
+%}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage[space=true]{accsupp}
+\newcommand{\copyablespace}{\BeginAccSupp{method=hex,unicode,ActualText=00A0}\hphantom{x}\EndAccSupp{}}
+\title{\sffamily Numerical analysis of Taylor Series}
+\author{\sffamily Shashvat Jain\\ \sffamily (2020PHY1114)(20068567054)}
+\begin{document}
+
+%\begin{abstract}
+
+%\end{abstract}
+\begin{titlepage}
+	\renewcommand\familydefault{\sfdefault}
+	\fontfamily{stix}\selectfont
+	\maketitle
+	\vspace{4cm}
+	\begin{center}
+		\large Lab Report for Assignment No. 1
+	\end{center}
+	\vspace{4cm}
+
+	\begin{table}[h]
+		\centering	
+		\begin{tabularx}{0.55\textwidth}{lr}		
+			College Roll No :& 2020PHY1114\\
+			University Roll NoName:& 20068567054\\
+			Unique Paper Code: &32221401\\
+			Paper Title: &Mathematical physics III Lab\\
+			Course and Semester :&B.Sc.(H) Physics Sem IV\\
+			Due Date: & Jan 15,2022\\
+			Date of Submission:& Jan 14,2022\\
+			Lab Report File Name:& mp3A1\_2020PHY1114.pdf\\
+			Partner’s Name:& Harsh Saxsena\\
+			Partner’s College  Roll No.:& \sffamily 2020PHY1162\\
+		\end{tabularx}
+	\end{table}
+	
+	\pagenumbering{gobble}
+\end{titlepage}
+\newpage
+\section{Theory}
+
+Any one-variable infinitely differentiable real-valued function $ f(x): A \rightarrow B $ where $A,B \subseteq \mathbb{R}$ might be expanded as an infinite power series function with parameter $ x_0 \in A $, This series function is also termed as \textbf{Taylor series} representation of $ f $ because of its procurement from the \textbf{Taylor's Theorem.}   
+\begin{align}
+	f(x) = T(x,x_0) &= f(x_0)+{\frac {f'(x_0)}{1!}}(x-x_0)+{\frac {f''(x_0)}{2!}}(x-x_0)^{2}+{\frac {f'''(x_0)}{3!}}(x-x_0)^{3}+\cdots \nonumber\\
+	 &= \sum _{n=0}^{\infty }{\frac {f^{(n)}(x_0)}{n!}}(x-x_0)^{n} \qquad \qquad \qquad\qquad\qquad 
+\end{align}
+
+\noindent
+Taylor series representation of a function with the parameter $ x_0 = 0 $ is called the \textbf{Maclaurin series}.
+\begin{align}
+	f(x) = T(x,0) &= \sum _{n=0}^{\infty }{\frac {f^{(n)}(0)}{n!}}(x)^{n} 
+\end{align}
+\\
+The point on the line $ x = x_0 $ is called the center of taylor series. The value of the function and its derivatives must be known at the center and the radius of convergence of the series is determined about this point.\\[3mm]
+\noindent
+\textbf{Radius of Convergence of a power series}: Every power series has a radius of convergence $R$ which is the distance of its center from the nearest singularity(point of divergence).
+If $R > 0$, then the power series $ \sum_{n=0}^{\infty} {c_n (x-x_0)^n}$ converges for all $ |x-a|\leq R $ and diverges for $ |x-a| > R $. If the series converges for all x, then we write $ R=\infty $. 
+
+\noindent \\
+Taylor series representation for a function of two variables $ f(x,y): \mathbb{R}^2 \rightarrow \mathbb{R} $ about $(x,y) = (x_0,y_0)$ is given by the Taylor theorem as follows,
+\begin{align}
+	f(x,y) = T((x,y),(x_,y_0)) = f(x_0,y_0) + f_x|_{x_0,y_0}(x-x_0) + f_y|_{x_0,y_0}(y-y_0) + + f_xx|_{x_0,y_0}(x-x_0)^2 \nonumber\\ + f_{yy}|_{x_0,y_0}(y-y_0)^2 + f_{xy}|_{x_0,y_0}(x-x_0)(y-y_0) + \cdots
+\end{align}
+
+\noindent \\
+The functions $ \exp(x),\sin(x),\cos(x): \mathbb{R} \rightarrow \mathbb{R}$ are defined by the following Maclaurin series expansions.
+\begin{align}
+	\exp(x) &=\sum _{n=0}^{\infty }{\frac {x^n}{n!}} &\quad {\text{for all }}x\\
+	\sin(x) &=\sum _{n=0}^{\infty }{\frac {(-1)^{n}}{(2n+1)!}}x^{2n+1} &\quad {\text{for all }}x\\
+	\cos(x) &=\sum _{n=0}^{\infty }{\frac {(-1)^{n}}{(2n)!}}x^{2n} &\quad {\text{for all }}x
+\end{align}
+
+\section{Algorithm}
+\begin{algorithm}[H]
+	\caption{Use Composite Trapezoidal rule to find fixed-tolerance numerical approximation for the given definite integral.}
+	\begin{algorithmic}
+		\Procedure{MyTrap}{f,a,b,max\_subs,d} 
+		\hline \\
+		\State Input: f is the integrand, a is the lower limit and b is the upper-limit of integration, max\_subs is the number of sub-intervals that the algorithm cannot exceed and d is the number of significant digits required in the numerical approximation of the integral.
+		\State Output: Returns $I_{num}(f)$, the numerical approximation of $I$(f) 
+		\\
+		\hline 
+		\\
+		\Comment We calculate the fixed-tolerance approximation integral by continually calculating the integral for double the number of subintervals than done in the prior iteration in order to avoid calculation of already calculated values of f(x). \\
+		\State $m \gets$ A vector of number of subintervals to calculate the integrals for, A geometric progression with commmon ratio 2.
+		\State $I \gets $  A vector that stores the value of the integral obtained after each iteration.
+		\State $X^0 \gets $ A vector of equally spaced nodes in closed interval $[a,b]$ obtained for $m_0$
+		\State $ l \gets length(m_0)$
+		\State $ n \gets length(X)$
+		\State $I_0 \gets {\displaystyle {\frac{b-a}{3m_0} }{\bigg [}f(X_{0})+2\sum _{j=1}^{n-1}f(X_{j})+f(X_{n}){\bigg ]}} $
+		\For{ $k = 1,2,3\dots l$ }
+		\State $X^k \gets $ A vector of equally spaced nodes in closed interval $[a,b]$ obtained for $m_k$
+		\State $ n \gets length(X^k)$
+		\State ${\displaystyle I_k = \frac{I_{k-1}}{2} + \frac{b-a}{m_k}{\bigg [}\sum _{j=1}^{n-1}f(X_{j}){\bigg ]}} $
+		\If{$|I_k - I_{k-1}| \leq 0.5\times10^{-d} \times |I_k|$}
+		\State \textbf{Return} $I_k,m_k$
+		\State EXIT
+		\EndIf
+		\EndFor    
+		\State Could not reach tolerance.
+		\State \textbf{Return} $I_l,m_l$
+		\State EXIT
+		\EndProcedure
+	\end{algorithmic} 
+\end{algorithm}
+
+\newpage
+
+\begin{algorithm}[H]
+	\caption{Use composite Trapezoidal rule to find fixed-tolerance numerical approximation for the given definite integral.}
+	\begin{algorithmic}
+		\Procedure{MySimp}{f,a,b,max\_subs,d} 
+		\hline \\
+		\State Input: f is the integrand, a is the lower limit and b is the upper-limit of integration, max\_subs is the number of sub-intervals that the algorithm cannot exceed and d is the number of significant digits required in the numerical approximation of the integral.
+		\State Output: Returns $I_{num}(f)$, the numerical approximation of $I$(f) 
+		\\
+		\hline 
+		\\
+		\Comment We calculate the fixed-tolerance approximation integral by continually calculating the integral for double the number of subintervals than done in the prior iteration in order to avoid calculation of already calculated values of f(x). \\
+		\State $m \gets$ A vector of number of subintervals to calculate the integrals for, A geometric progression with commmon ratio 2.
+		\State $I \gets $  A vector that stores the value of the integral obtained after each iteration.
+		\State $X \gets $ A vector of equally spaced nodes in closed interval $[a,b]$ obtained for $m_0$
+		\State $ l \gets length(m_0)$
+		\State $ n \gets length(X)$
+		\State $I_0 \gets {\displaystyle {\frac{b-a}{3m_0} }{\bigg [}f(X_{0})+2\sum _{j=1}^{n/2-1}f(X_{2j})+4\sum _{j=1}^{n/2}f(X_{2j-1})+f(X_{n}){\bigg ]}} $
+		\For{ $k = 1,2,3\dots l$ }
+		\State $X^k \gets $ A vector of equally spaced nodes in closed interval $[a,b]$ obtained for $m_k$
+		\State $ n \gets length(X^k)$
+		\State ${\displaystyle I_k = \frac{I_{k-1}}{2} + \frac{b-a}{3m_k}{\bigg [}4\sum _{j=1}^{n/2}f(X_{2j-1})-2\sum _{j=1}^{n/2-1}f(X_{2j}){\bigg ]}} $
+		\If{$|I_k - I_{k-1}| \leq 0.5\times10^{-d} \times |I_k|$}
+		\State \textbf{Return} $I_k,m_k$
+		\State EXIT
+		\EndIf
+		\EndFor    
+		\State Could not reach tolerance.
+		\State \textbf{Return} $I_l,m_l$
+		\State EXIT
+		\EndProcedure
+	\end{algorithmic} 
+\end{algorithm}
+
+\end{document}

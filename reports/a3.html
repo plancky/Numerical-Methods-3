@@ -1,0 +1,51 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="a3_files/page.css" type="text/css">
+<link rel="stylesheet" href="a3_files/boilerplate.css" type="text/css">
+<link rel="stylesheet" href="a3_files/fbm.css" type="text/css">
+<link rel="stylesheet" href="a3_files/mpl.css" type="text/css">
+<script src="a3_files/mpl_tornado.js"></script>
+<script src="a3_files/mpl.js"></script>
+<script>
+function ready(fn) {
+if (document.readyState != "loading") {
+fn();
+} else {
+document.addEventListener("DOMContentLoaded", fn);
+}
+}
+function figure_ready(fig_id) {
+return function () {
+var main_div = document.querySelector("div#figures");
+var figure_div = document.createElement("div");
+figure_div.id = "figure-div";
+main_div.appendChild(figure_div);
+var websocket_type = mpl.get_websocket_type();
+var websocket = new websocket_type("ws://127.0.0.1:8988/" + fig_id + "/ws");
+var fig = new mpl.figure(fig_id, websocket, mpl_ondownload, figure_div);
+fig.focus_on_mouseover = true;
+fig.canvas.setAttribute("tabindex", fig_id);
+}
+};
+
+ready(figure_ready(1));
+
+ready(figure_ready(2));
+
+ready(figure_ready(3));
+
+</script>
+<title>MPL | WebAgg current figures</title>
+</head>
+<body>
+<div id="mpl-warnings" class="mpl-warnings"></div>
+<div id="figures" style="margin: 10px 10px;"><div id="figure-div"><div style="display: inline-block"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><div class="ui-dialog-title" style="width: 100%; text-align: center; padding: 3px;">Figure 1</div></div><div style="border: 1px solid rgb(221, 221, 221); box-sizing: content-box; clear: both; min-height: 1px; min-width: 1px; outline: currentcolor none 0px; overflow: hidden; position: relative; resize: both; width: 1307px; height: 633px;"><canvas class="mpl-canvas" style="width: 1307px; height: 633px;" tabindex="1" width="1307" height="633"></canvas><canvas style="box-sizing: content-box; position: absolute; left: 0px; top: 0px; z-index: 1; cursor: default;" width="1307" height="633"></canvas></div><div class="mpl-toolbar"><div class="mpl-button-group"><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/home.png" srcset="_images/home_large.png 2x" alt="Reset original view"></button><button class="mpl-widget" role="button" aria-disabled="true" disabled="disabled"><img src="a3_files/back.png" srcset="_images/back_large.png 2x" alt="Back to previous view"></button><button class="mpl-widget" role="button" aria-disabled="true" disabled="disabled"><img src="a3_files/forward.png" srcset="_images/forward_large.png 2x" alt="Forward to next view"></button></div><div class="mpl-button-group"><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/move.png" srcset="_images/move_large.png 2x" alt="Left button pans, Right button zooms
+x/y fixes axis, CTRL fixes aspect"></button><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/zoom_to_rect.png" srcset="_images/zoom_to_rect_large.png 2x" alt="Zoom to rectangle
+x/y fixes axis"></button></div><div class="mpl-button-group"><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/filesave.png" srcset="_images/filesave_large.png 2x" alt="Download plot"></button></div><select class="mpl-widget"><option>eps</option><option>jpeg</option><option>pgf</option><option>pdf</option><option selected="selected">png</option><option>ps</option><option>raw</option><option>svg</option><option>tif</option></select><span class="mpl-message">x=−2.144 y=0.237</span></div></div></div><div id="figure-div"><div style="display: inline-block"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><div class="ui-dialog-title" style="width: 100%; text-align: center; padding: 3px;">Figure 2</div></div><div style="border: 1px solid rgb(221, 221, 221); box-sizing: content-box; clear: both; min-height: 1px; min-width: 1px; outline: currentcolor none 0px; overflow: hidden; position: relative; resize: both; width: 640px; height: 480px;"><canvas class="mpl-canvas" style="width: 640px; height: 480px;" tabindex="2" width="640" height="480"></canvas><canvas style="box-sizing: content-box; position: absolute; left: 0px; top: 0px; z-index: 1; cursor: default;" width="640" height="480"></canvas></div><div class="mpl-toolbar"><div class="mpl-button-group"><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/home.png" srcset="_images/home_large.png 2x" alt="Reset original view"></button><button class="mpl-widget" role="button" aria-disabled="true" disabled="disabled"><img src="a3_files/back.png" srcset="_images/back_large.png 2x" alt="Back to previous view"></button><button class="mpl-widget" role="button" aria-disabled="true" disabled="disabled"><img src="a3_files/forward.png" srcset="_images/forward_large.png 2x" alt="Forward to next view"></button></div><div class="mpl-button-group"><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/move.png" srcset="_images/move_large.png 2x" alt="Left button pans, Right button zooms
+x/y fixes axis, CTRL fixes aspect"></button><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/zoom_to_rect.png" srcset="_images/zoom_to_rect_large.png 2x" alt="Zoom to rectangle
+x/y fixes axis"></button></div><div class="mpl-button-group"><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/filesave.png" srcset="_images/filesave_large.png 2x" alt="Download plot"></button></div><select class="mpl-widget"><option>eps</option><option>jpeg</option><option>pgf</option><option>pdf</option><option selected="selected">png</option><option>ps</option><option>raw</option><option>svg</option><option>tif</option></select><span class="mpl-message"></span></div></div></div><div id="figure-div"><div style="display: inline-block"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><div class="ui-dialog-title" style="width: 100%; text-align: center; padding: 3px;">Figure 3</div></div><div style="border: 1px solid rgb(221, 221, 221); box-sizing: content-box; clear: both; min-height: 1px; min-width: 1px; outline: currentcolor none 0px; overflow: hidden; position: relative; resize: both; width: 640px; height: 480px;"><canvas class="mpl-canvas" style="width: 640px; height: 480px;" tabindex="3" width="640" height="480"></canvas><canvas style="box-sizing: content-box; position: absolute; left: 0px; top: 0px; z-index: 1; cursor: default;" width="640" height="480"></canvas></div><div class="mpl-toolbar"><div class="mpl-button-group"><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/home.png" srcset="_images/home_large.png 2x" alt="Reset original view"></button><button class="mpl-widget" role="button" aria-disabled="true" disabled="disabled"><img src="a3_files/back.png" srcset="_images/back_large.png 2x" alt="Back to previous view"></button><button class="mpl-widget" role="button" aria-disabled="true" disabled="disabled"><img src="a3_files/forward.png" srcset="_images/forward_large.png 2x" alt="Forward to next view"></button></div><div class="mpl-button-group"><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/move.png" srcset="_images/move_large.png 2x" alt="Left button pans, Right button zooms
+x/y fixes axis, CTRL fixes aspect"></button><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/zoom_to_rect.png" srcset="_images/zoom_to_rect_large.png 2x" alt="Zoom to rectangle
+x/y fixes axis"></button></div><div class="mpl-button-group"><button class="mpl-widget" role="button" aria-disabled="false"><img src="a3_files/filesave.png" srcset="_images/filesave_large.png 2x" alt="Download plot"></button></div><select class="mpl-widget"><option>eps</option><option>jpeg</option><option>pgf</option><option>pdf</option><option selected="selected">png</option><option>ps</option><option>raw</option><option>svg</option><option>tif</option></select><span class="mpl-message"></span></div></div></div></div>
+
+
+</body></html>

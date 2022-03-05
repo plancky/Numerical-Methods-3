@@ -1,7 +1,7 @@
 import numpy as np 
 from scipy.special import roots_legendre
 
-def MyTrap(func,a,b,m=int(1e3),d=None,*args):
+def MyTrap(func,a,b,m=int(2e6),d=None,*args):
     """
     Integrate `func` from `a` to `b` using composite trapezoidal rule. If `d` is not passed as argument during call then `m` is the number of uniformly spaced subintervals in the interval `[a,b]`. 
     When `d` is passed during call, the returned integral is accurate to atleast `d` significant digits, using a fixed relative-tolerance of ``0.5x10**-d``; Also `m` is now considered to be the upper-limit on the number of subintervals during the calculation of fixed-tolerance integral.
@@ -35,17 +35,19 @@ def MyTrap(func,a,b,m=int(1e3),d=None,*args):
     """
     if d is not None and m!=1:
         max_n = np.floor(np.log2(m))
-        m_array = np.logspace(0,max_n,base=2,num = int(max_n+1))
+        m_array = np.logspace(1,max_n,base=2,num = int(max_n),dtype=int)
+        print(m_array)
         I = np.zeros(m_array.shape)
         h = (b-a)/m_array
         x = np.linspace(a,b,int(m_array[0]+1))
         y = func(x)
         I[0] = (h[0]/2)*np.sum(y[:-1] + y[1:])
-        for i in np.arange(0,m_array.shape[0]):
+        for i in np.arange(1,m_array.shape[0]):
             x = np.linspace(a,b,int(m_array[i]+1))
             midx  = x[1::2]
             I[i] = (1/2)*I[i-1] + h[i]*(np.sum(func(midx)))
-            if np.abs(I[i]-I[i-1]) <= 0.5/10**d*np.abs(I[i]):
+            print(np.abs(I[i]-I[i-1]))
+            if np.abs(I[i]-I[i-1]) <= 0.5/10**d*np.abs(I[i]) or (np.abs(I[i])<=1e-14 and np.abs(I[i]-I[i-1])<=1/10**d):
                 val,last_m =I[i],m_array[i]
                 return val,last_m
         print("Could not reach desired accuracy with the given upperlimit on the number of intervals.(m) ")
@@ -56,7 +58,7 @@ def MyTrap(func,a,b,m=int(1e3),d=None,*args):
     val = (b-a)/(2*m)*np.sum(y[:-1]+y[1:])
     return val
 
-def MySimp(func,a,b,m=int(1e3),d=None,*args):
+def MySimp(func,a,b,m=int(2e2),d=None,*args):
     """
     Integrate `func` from `a` to `b` using composite simpson1/3 rule. If `d` is not passed as argument during call then `m` is the number of uniformly spaced subintervals in the interval `[a,b]`. 
     When `d` is passed during call, the returned integral is accurate to atleast `d` significant digits, using a fixed relative-tolerance of ``0.5x10**-d``; Also `m` is now considered to be the upper-limit on the number of subintervals during the calculation of fixed-tolerance integral.
@@ -90,7 +92,7 @@ def MySimp(func,a,b,m=int(1e3),d=None,*args):
     """
     if d is not None and m!=1:
         max_n = np.floor(np.log2(m))
-        m_array = np.logspace(1,max_n,base=2,num = int(max_n))
+        m_array = np.logspace(5,max_n,base=2,num = int(max_n-4))
         I = np.zeros(m_array.shape)
         h = (b-a)/m_array
         x = np.linspace(a,b,int(m_array[0]+1))
@@ -114,7 +116,7 @@ def MySimp(func,a,b,m=int(1e3),d=None,*args):
     val = (b-a)/(3*m)*np.sum(y[:-1:2]+4*y[1::2]+y[2::2])
     return val
 
-def MyLegQuadrature(func,a,b,n=5,m=100,d=None,*args):
+def MyLegQuadrature(func,a,b,n=15,m=10,d=None,*args):
     """
     Integrate `func` from `a` to `b` using composite Gaussian Quadrature Method. If `d` is not passed as argument during call then `m` is the number of uniformly spaced subintervals in the interval `[a,b]`. 
 
@@ -161,7 +163,7 @@ def MyLegQuadrature(func,a,b,n=5,m=100,d=None,*args):
             I[i] = MyLegQuadrature(func,a,b,n,m_array[i])
             if i == 0 :
                 continue
-            if np.abs(I[i]-I[i-1]) < 0.5/10**d*np.abs(I[i]):
+            if np.abs(I[i]-I[i-1]) < 0.5/10**d*np.abs(I[i]) or np.abs(I[i])<=1e-15:
                 val,last_m = I[i],m_array[i]
                 return val,last_m
         print("Could not reach desired accuracy with the given upperlimit on the number of intervals.(m) ")
@@ -187,8 +189,8 @@ if __name__=="__main__":
     print(MyTrap(lambda x: x**2,0,6),6**3/3)
 
     #For MySimp 
-    print(MySimp(lambda x: x**3,0,6,2),6**4/4)
-    print(MySimp(lambda x: x**4,0,6.2),6**5/5)
+    print("Simp",MySimp(lambda x: x**3,0,6,2),6**4/4)
+    print(MySimp(lambda x: x**4,0,6,2),6**5/5)
     
     #For MyLegQuadrature 
     print(MyLegQuadrature(lambda x: x**3,0,6,2,1),6**4/4)

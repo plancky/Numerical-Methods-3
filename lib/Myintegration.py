@@ -1,5 +1,5 @@
 import numpy as np 
-from scipy.special import roots_legendre
+from scipy.special import roots_legendre,roots_laguerre,roots_hermite
 
 def MyTrap(func,a,b,m=int(2e6),d=None,*args):
     """
@@ -178,9 +178,19 @@ def MyLegQuadrature(func,a,b,n=15,m=10,d=None,*args):
     val = I
     return val
 
+def MyLeguQuad(func,n=4):
+    x,w = roots_laguerre(n)
+    return(w.dot(func(x)*np.exp(x)))
+
+def MyHermiteQuad(func,n=4):
+    x,w = roots_hermite(n)
+    return(w.dot(func(x)*np.exp(x**2)))
+
 MyTrap = np.vectorize(MyTrap)
 MySimp = np.vectorize(MySimp)
 MyLegQuadrature = np.vectorize(MyLegQuadrature)
+MyLeguQuad = np.vectorize(MyLeguQuad)
+MyHermiteQuad = np.vectorize(MyHermiteQuad)
 
 if __name__=="__main__":
     #Validation tests integral-assignment_programming(a)
@@ -193,6 +203,7 @@ if __name__=="__main__":
     print(MySimp(lambda x: x**4,0,6,2),6**5/5)
     
     #For MyLegQuadrature 
+    # Legendre-Gauss Quadrature
     print(MyLegQuadrature(lambda x: x**3,0,6,2,1),6**4/4)
     print(MyLegQuadrature(lambda x: x**4,0,6,2,1),6**5/5)
     

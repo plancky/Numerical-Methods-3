@@ -38,6 +38,3 @@ def simpsonLagu(f,max_b= int(1e8),rtol = 0.5*10**(-4)):
 print(simpsonLagu(I1))
 print(simpsonLagu(I2))
 np.savetxt("quad-lag-1114.out",dat,fmt="%.7g",delimiter=",",header="n,$I_1$,$I_2$")
-
-#def simp0inf():
-#    for i in range()

@@ -72,7 +72,7 @@ if __name__ == "__main__":
     p,pcov = curve_fit(lambda x,a,b:a*x+b,inptdat[:,0],inptdat[:,1],sigma=std ,absolute_sigma=True)
     print("\nInbuilt scipy.optimize.curve_fit => ",p,np.sqrt(np.diag(pcov)))
 
-    #np.savetxt("1114.out",[k,m])
+    np.savetxt("1114.out",[k,m])
     fig,ax = plt.subplots(1,1)
     ax.errorbar(inptdat[:,0],inptdat[:,1],se,fmt= ".",color='black',
                 ecolor='red', elinewidth=3, capsize=0,label = "Data-points, error bars 1STE")

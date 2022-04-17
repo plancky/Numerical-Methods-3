@@ -21,8 +21,7 @@ def rk4(y,f,h,i):
     return(x_i + h*avg_m)
 
 def rk2(i,y,f,h):
-    return(y[i] + (f[i-1](*y) + f[i-1](*put(y,[0,i],[y[0]+h,y[i] + h*f[i-1](*y)])
-    ))/2*h)
+    return(y[i] + (f[i-1](*y) + f[i-1](*put(y,[0,i],[y[0]+h,y[i] + h*f[i-1](*y)])))/2*h)
 
 def em(i,y,f,h):
     return(y[i] + f[i-1](*put(y,[0,i],[y[0]+h/2,y[i] + (h/2)*f[i-1](*y)]))*h)

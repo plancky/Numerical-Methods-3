@@ -5,11 +5,6 @@ from matplotlib import use
 use("webAgg")
 plt.style.use("bmh")
 
-def put(x,i,v):
-    x_ = x.copy()
-    np.put(x_,i,v)
-    return(x_)
-
 def rk4(f,t,y,h): 
     m1 = f(t,y)
     m2 = f(t+h/2,y+h/2*m1)
@@ -31,7 +26,7 @@ def ef(f,t,y,h):
 def ode_solver(func,t_axis,ini,Nh,n,method=ef):
     N,h = Nh
     data = np.zeros((N+1,n),dtype="double")
-    data[:,0],data[0,:] = t_axis, np.array(ini)
+    data[:,0],data[0,:] = t_axis, np.array(ini,dtype=float)
     params =  np.arange(1,n)
     iter = np.vectorize(method, excluded=["f","h","y"]) 
     for j in range(1,N+1) :

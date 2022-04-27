@@ -22,7 +22,7 @@ class ordinary_bvp:
         self.ddom = np.linspace(self.dom[0],self.dom[1],N+1)
         self.w = np.zeros(self.ddom.shape) 
         #ddom,w = [0,1,2....N-1,N]
-        self.h = abs(np.diff(self.ddom)[0])/N
+        self.h = abs(np.diff(self.ddom)[0])
         h,x = self.h,self.ddom
         self.d = vec(lambda i : 2 + h**2*self.p(x[i]))
         self.u = vec(lambda i : -1 + h/2*self.q(x[i]))
@@ -61,7 +61,7 @@ class ordinary_bvp:
             self.b1= b_(0)+2*h*l(0)*c3/c2
         else:
             raise ValueError("btype should be 'diri','nn' or 'rob'")
-    '''
+    
     def set_dirichlet(self,a,b):
         self.w[0],self.w[-1] = a,b
         h,x = self.h,self.ddom
@@ -86,7 +86,7 @@ class ordinary_bvp:
         self.a11,self.a12 = d(0) + 2*h*l(0)*a1/a2,-2
         self.ann,self.an_1n = d(N) - 2*h*u(N)*b1/b2 ,-2
         self.b1,self.bn = b_(0)+2*h*l(0)*a3/a2, b_(N)-2*h*l(N)*b3/b2
-        return self.w'''
+        return self.w
         
     def get_A_b(self):
         ii = np.arange(1,self.N)
@@ -112,9 +112,10 @@ if __name__ == "__main__":
     use("webAgg")
     plt.style.use("bmh")
     bvp1 = ordinary_bvp(lambda x: np.pi**2,lambda x:0,lambda x:-2*np.pi**2*np.sin(np.pi*x),(0,1),lambda x : np.sin(np.pi*x))
-    bvp1.discretize(800)
-    bvp1.set_a(0,btype="diri")
-    bvp1.set_b(0,btype="diri") 
+    bvp1.discretize(3)
+    #bvp1.set_a(0,btype="diri")
+    #bvp1.set_b(0,btype="diri") 
+    bvp1.set_dirichlet(0,0)
     A,b = bvp1.get_A_b()
     fig1,ax1 = plt.subplots(1,1)
     bvp1.plot_exact(ax1)

@@ -28,6 +28,38 @@ class ordinary_bvp:
         self.b = vec(lambda i : -h**2*self.r(x[i]))  
         return self.ddom
 
+    def set_a(self,c,btype = "nn"):
+        h,x = self.h,self.ddom
+        b_,d,l,u,N = self.b,self.d,self.l,self.u,self.N
+        if btype == "diri":
+            self.a11,self.a12 = 1,0
+            self.b1 = c
+        elif btype == "nn":
+            self.a11,self.a12 = d(0),-2
+            self.b1 = b_(0)+2*h*l(0)*c
+        elif btype == "rob":
+            (c1,c2,c3) = c
+            self.a11,self.a12 = d(0) + 2*h*l(0)*c1/c2,-2
+            self.b1= b_(0)+2*h*l(0)*c3/c2
+        else:
+            raise ValueError("btype should be 'diri','nn' or 'rob'")    
+        
+    def set_b(self,c,btype = "nn"):
+        h,x = self.h,self.ddom
+        b_,d,l,u,N = self.b,self.d,self.l,self.u,self.N
+        if btype == "diri":
+            self.ann,self.an_1n = 1,0
+            self.bn = c
+        elif btype == "nn":
+            self.ann,self.an_1n = d(N),-2
+            self.bn = b_(N)-2*h*l(N)*c
+        elif btype == "rob":
+            (c1,c2,c3) = c
+            self.ann,self.an_1n = d(N) - 2*h*u(N)*c1/c2 ,-2
+            self.b1= b_(0)+2*h*l(0)*c3/c2
+        else:
+            raise ValueError("btype should be 'diri','nn' or 'rob'")
+
     def set_dirichlet(self,a,b):
         self.w[0],self.w[-1] = a,b
         h,x = self.h,self.ddom
@@ -67,6 +99,17 @@ class ordinary_bvp:
 
 if __name__ == "__main__":
     bvp1 = ordinary_bvp(lambda x: np.pi**2,lambda x:0,lambda x:-2*np.pi**2*np.sin(np.pi*x),(0,1))
-    bvp1.discretize(4)
-    bvp1.set_neumann(1,2)
-    print(bvp1.get_A_b())
+    bvp1.discretize(100)
+    bvp1.set_a(0,btype="diri")
+    bvp1.set_b(0,btype="diri")
+    y1_exact = lambda x : np.sin(np.pi*x) 
+    A,b = bvp1.get_A_b()
+    print(np.linalg.solve(A,b) - y1_exact(bvp1.ddom))
+
+    bvp2 = ordinary_bvp(lambda x: -1,lambda x:0,lambda x:np.sin(3*x),(0,np.pi/2))
+    bvp2.discretize(100)
+    bvp2.set_a((1,1,-1),btype="rob")
+    bvp2.set_b(1,btype="nn")
+    y2_exact = lambda x : 3/8*np.sin(x) - np.cos(x) - 1/8*np.sin(3*x) 
+    A,b = bvp2.get_A_b()
+    print(np.linalg.solve(A,b) - y2_exact(bvp2.ddom))

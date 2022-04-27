@@ -39,18 +39,19 @@ class ordinary_bvp:
     def set_neumann(self,a,b):
         self.w[0],self.w[-1] = a,b
         h,x = self.h,self.ddom
-        self.a11,self.a12 = self.d(0),-2
-        self.ann,self.an_1n = self.d(self.N),-2
-        self.b1,self.bn = self.b(0)+2*h*self.l(0)*a,self.b(self.N)-2*h*self.l(self.N)*b
+        b_,d,l,u,N = self.b,self.d,self.l,self.u,self.N
+        self.a11,self.a12 = d(0),-2
+        self.ann,self.an_1n = d(N),-2
+        self.b1,self.bn = b_(0)+2*h*l(0)*a,b_(N)-2*h*l(N)*b
         return self.w
     
     def set_robin(self,a,b): # a1 y(0) + a2 y'(0) = a3 ; b1 y(N) + b2y'(N) = b3 
         (a1,a2,a3),(b1,b2,b3) = a,b
         h,x = self.h,self.ddom
-        r,b,d,l,u,N = self.r,self.b,self.d,self.l,self.u,self.N
+        b_,d,l,u,N = self.b,self.d,self.l,self.u,self.N
         self.a11,self.a12 = d(0) + 2*h*l(0)*a1/a2,-2
         self.ann,self.an_1n = d(N) - 2*h*u(N)*b1/b2 ,-2
-        self.b1,self.bn = b(0)+2*h*l(0)*a3/a2, b(N)-2*h*l(N)*b3/b2
+        self.b1,self.bn = b_(0)+2*h*l(0)*a3/a2, b_(N)-2*h*l(N)*b3/b2
         return self.w
         
     def get_A_b(self):
@@ -67,5 +68,5 @@ class ordinary_bvp:
 if __name__ == "__main__":
     bvp1 = ordinary_bvp(lambda x: np.pi**2,lambda x:0,lambda x:-2*np.pi**2*np.sin(np.pi*x),(0,1))
     bvp1.discretize(4)
-    bvp1.set_dirichlet(0,0)
+    bvp1.set_neumann(1,2)
     print(bvp1.get_A_b())

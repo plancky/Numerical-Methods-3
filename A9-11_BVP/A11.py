@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import vectorize as vec
+
 def get_tridiag(l,d,u):
     N = len(d)
     if not (N-1 == len(l) and N-1 ==len(u)):
@@ -8,11 +9,12 @@ def get_tridiag(l,d,u):
 
 #y′′ (x) + p(x)y ′ (x) + q(x)y(x) + r(x) = 0
 class ordinary_bvp:
-    def __init__(self,p,q,r,dom=(0,1)) -> None:
+    def __init__(self,p,q,r,dom=(0,1),exact=lambda x:1 ) -> None:
         self.p = p 
         self.q = q 
         self.r = r
         self.dom = dom
+        self.exact = exact
         pass
 
     def discretize(self,N:int):
@@ -59,7 +61,7 @@ class ordinary_bvp:
             self.b1= b_(0)+2*h*l(0)*c3/c2
         else:
             raise ValueError("btype should be 'diri','nn' or 'rob'")
-
+    '''
     def set_dirichlet(self,a,b):
         self.w[0],self.w[-1] = a,b
         h,x = self.h,self.ddom
@@ -84,27 +86,41 @@ class ordinary_bvp:
         self.a11,self.a12 = d(0) + 2*h*l(0)*a1/a2,-2
         self.ann,self.an_1n = d(N) - 2*h*u(N)*b1/b2 ,-2
         self.b1,self.bn = b_(0)+2*h*l(0)*a3/a2, b_(N)-2*h*l(N)*b3/b2
-        return self.w
+        return self.w'''
         
     def get_A_b(self):
         ii = np.arange(1,self.N)
         l_,d_ = np.zeros(self.N),np.zeros(self.N+1)
-        u_,b_ = l_.copy(),d_.copy()
+        u_,self.b_ = l_.copy(),d_.copy()
         l_[:-1],l_[-1] = self.l(ii), self.an_1n 
         u_[1:],u_[0] = self.u(ii), self.a12 
         d_[1:-1],d_[0],d_[-1] = self.d(ii),self.a11,self.ann
-        b_[1:-1],b_[0],b_[-1] = self.b(ii),self.b1,self.bn 
-        A = get_tridiag(l_,d_,u_)
-        return A,b_
+        self.b_[1:-1],self.b_[0],self.b_[-1] = self.b(ii),self.b1,self.bn 
+        self.A = get_tridiag(l_,d_,u_)
+        return self.A,self.b_
+
+    def plot_exact(self,ax):
+        x_space = np.linspace(*self.dom)
+        ax.plot(x_space,self.exact(x_space),label="Exact")
+    def plot_num(self,ax):
+        ax.plot(self.ddom,np.linalg.solve(self.A,self.b_),"1",label=f"$N={self.N}$")
+        
 
 if __name__ == "__main__":
-    bvp1 = ordinary_bvp(lambda x: np.pi**2,lambda x:0,lambda x:-2*np.pi**2*np.sin(np.pi*x),(0,1))
-    bvp1.discretize(100)
+    import matplotlib.pyplot as plt
+    from matplotlib import use
+    use("webAgg")
+    plt.style.use("bmh")
+    bvp1 = ordinary_bvp(lambda x: np.pi**2,lambda x:0,lambda x:-2*np.pi**2*np.sin(np.pi*x),(0,1),lambda x : np.sin(np.pi*x))
+    bvp1.discretize(800)
     bvp1.set_a(0,btype="diri")
-    bvp1.set_b(0,btype="diri")
-    y1_exact = lambda x : np.sin(np.pi*x) 
+    bvp1.set_b(0,btype="diri") 
     A,b = bvp1.get_A_b()
-    print(np.linalg.solve(A,b) - y1_exact(bvp1.ddom))
+    fig1,ax1 = plt.subplots(1,1)
+    bvp1.plot_exact(ax1)
+    bvp1.plot_num(ax1)
+    plt.legend()
+    plt.show()
 
     bvp2 = ordinary_bvp(lambda x: -1,lambda x:0,lambda x:np.sin(3*x),(0,np.pi/2))
     bvp2.discretize(100)

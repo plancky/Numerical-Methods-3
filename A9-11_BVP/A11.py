@@ -38,13 +38,13 @@ class ordinary_bvp:
         self.set_robin((0,1,a),(0,1,b))
     
     def set_robin(self,a=None,b=None): # a1 y(0) + a2 y'(0) = a3 ; b1 y(N) + b2y'(N) = b3 
+        if a == (0,0,0) or b==(0,0,0):
+            raise ValueError("Give appropriate Boundary conditions, (0,0,0) is nonsense.")
         if a is not None:
             self.arb = a
         if b is not None:
             self.brb = b
         (a1,a2,a3),(b1,b2,b3) = self.arb,self.brb
-        if a_ == (0,0,0) or b_==(0,0,0):
-            raise ValueError("Give appropriate Boundary conditions, (0,0,0) is nonsense.")
         h,x = self.h,self.ddom
         b_,d,l,u,N = self.b,self.d,self.l,self.u,self.N
         if a2 == 0 :

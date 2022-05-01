@@ -1,5 +1,9 @@
+from turtle import color
 import numpy as np
 from numpy import vectorize as vec
+
+def regress(x,y):
+    return np.linalg.lstsq(np.vstack([x,np.ones(x.shape)]).T,y,rcond=None)[0]
 
 def get_tridiag(l,d,u):
     N = len(d)
@@ -75,12 +79,37 @@ class ordinary_bvp:
         A,b =self.get_A_b()
         soln = np.linalg.solve(A,b)
         anasoln = self.exact(self.ddom)
-        rmse = np.sqrt((soln-anasoln)**2/self.N) 
-        return soln,rmse
+        rmse = np.sqrt(np.sum((soln-anasoln)**2/self.N))
+        abserr = np.abs(soln-anasoln)
+        return soln,rmse,abserr
+    
+    def lnE(self,ax=None):
+        N = 2**np.arange(1,7,dtype=int)
+        rmse = np.zeros(N.shape)
+        mabse = rmse.copy() 
+        for i,ni in enumerate(N):
+            self.discretize(ni)
+            self.set_robin(self.arb,self.brb)
+            soln,rmse[i],abserr = self.solve()
+            mabse[i]= np.max(abserr)
+        datE = np.array([N,rmse,mabse]).T
+        datE = np.log(datE)
+        np.savetxt("lnE_bvp1.csv",datE,fmt = "%.10g",delimiter=",",header="# N, ln(rmse),ln(abserr)")
+        m1,c1 = regress(datE[:,0],datE[:,1])
+        m2,c2 = regress(datE[:,0],datE[:,2])
+        if ax is not None:
+            ax.set_xlabel("ln(N)");ax.set_ylabel(r"ln($E_{RMSE}$) or ln($E_{ABS}$)")
+            ax.plot(datE[:,0],datE[:,1],"3",label= r"ln($E_{RMSE}$)")
+            ax.plot(datE[:,0],m1*datE[:,0]+c1,label = r"Lsq regression line: ln($E_{RMSE}$)")
+            ax.plot(datE[:,0],datE[:,2],"2",label= r"ln($E_{ABS}$)")
+            ax.plot(datE[:,0],m2*datE[:,0]+c2,label = r"Lsq regression line: ln($E_{ABS}$)")
+            
+        return m1,m2,c1,c2
 
     def plot_exact(self,ax):
         x_space = np.linspace(*self.dom)
-        ax.plot(x_space,self.exact(x_space),label="Exact")
+        ax.set_xlabel("$x$");ax.set_ylabel("$y$")
+        ax.plot(x_space,self.exact(x_space),label="Exact",color = "red")
     def plot_num(self,ax):
         ax.plot(self.ddom,np.linalg.solve(self.A,self.b_),"1",label=f"$N={self.N}$")
         

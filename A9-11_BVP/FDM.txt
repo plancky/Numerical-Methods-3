@@ -1,0 +1,14 @@
+
+THEORY 
+1. Derive the general matrix form of the linear system.
+2. 
+
+CODE
+1. GENERAL SOLVER 
+2. PLOT 5,6 BVPs with exact soln, N=3/4,8
+3. ln(E) vs ln(N), E can be max abs or rms
+
+13-19-27-2-4
+
+Doubt
+1. wdym by maintaining the tridiagonal structure? do the derivation.
